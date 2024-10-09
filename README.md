@@ -1,105 +1,25 @@
-Pentru a fi pozitionat perfect, jocul trebuie sa fie rulat pe un terminal
-cu inaltimea de 45 si latimea de 177.
-  Durata totala de implementare a fost de 12 zile, unele zile neavand
-aproape deloc lucru, iar altele ajungand pana la 7-8 ore.
-  In prima faza am folosit functia "initializare_tabla" pentru a seta
-toate elementele jocului cu 0.
-  Functia "numere_inceput" este apelata doar o data si are ca scop generarea
-a doua numere random(2, 4) pe pozitii random. Prima data generez
-o pozitie aleatoare, plasez elementul random pe acea pozitie, intrucat
-tabla este goala. Mai apoi, mai generez inca o pozitie si verific ca acea
-pozitie sa nu fie pozitia in care am generat primul numar. Asigurandu-ma
-ca nu e pe aceeasi pozitie, ies din while si plasez 2 sau 4 pe acea pozitie.
-  Functia "date" este una simplista, creez o variabila de tip time_t(t), apelez 
-functia time pentru a modifica in adresa de memorie variabila t ce imi ofera
-numarul de secunde de la 1 ianuarie 1970. Mai apoi, cu ajutorul structurii 
-timp pot afisa ziua, luna, anul etc.
-  Functia "numar_random" se apeleaza de fiecare data cand exista o mutare valida
-si merge pe principiul descris la functia "numere_inceput", doar ca aici
-generez pozitia si testez daca acea pozitie este libera, ca mai apoi sa adaug
-elemntul generat tot random, 2 sau 4.
-  Functiile "mutare_stanga", "mutare_dreapta", "mutare_jos", "mutare_sus"
-functioneaza dupa acelasi principiu, asa ca voi descrie pe larg principiul
-mutarii la stanga, fiind prima dintre toate.
-  In primul rand, functia e de tip int pentru a imi intoarce daca este o miscare
-valida sau invalida. La inceput, miscare_valida este 0, urmand a fi modificata
-in caz de se muta orice element de pe orice linie, macar o data la stanga.
-Pentru mutarea la stanga, pornesc cu un for ce va parcurge toate liniile
-si pornesc de pe prima coloana. Daca elementul de pe prima coloana este 0,
-nu pot sa mut nimic, asa ca ma voi muta la dreapta pana cand gasesc un element
-diferit de 0, pentru a verifica daca il pot muta la stanga. 
-  Daca am gasit un element nenul, il salvez intr-un auxiliar pentru a vedea
-daca mutarea a produs imbinari sau doar a mutat elementul printre 0 uri. 
-Verific daca in stanga elementului este ori 0, ori daca elementul respectiv este
-egal cu cel din stanga. Daca una dintre cele doua se indeplineste, adaug la 
-elementul din stanga, elementul meu, pozitia curenta o resetez la 0 si merg
-pe coloana unde am adaugat elementul. Aici, verific din nou, daca in stanga este
-un 0 sau acel element este egal cu elementul meu. Daca da, se repeta procedeul.
-Cand ajunge la ultima imbinare posibila, j ul este pe o pozitie diferita de 0, asa
-ca, dupa ce ies din while, trebuie sa l cresc pentru a fi pe o pozitie egala cu 0,
-altfel, se va intra intr-o bucla infinita. 
-Daca elementul rezultat ultima data nu este egal cu elementul de la care am 
-pornit, cresc scorul, fiind rezultat al imbinarii.
-  Functia "initializre_culori" creeaza toate culorile si perechile de culori
-cu ajutorul RGB.
-  Functia "afisare_tabela" este apelata de fiecare data cand exista
-o modificare a tablei, fie a copiei(in caz de undo), fie a jocului propriu
-zis. Creez un vectori de valori si unul de culori, ale caror elemente
-au pe aceleasi pozitii numarul in concordanta cu a sa culoare. 
-Pentru fiecare element din matrice, creez un WINDOW(casuta), pe
-care o voi colora in functie de numarul de la pozitia respectiva.
-Pentru a verifica ce numar este, verific pozitie cu pozitie numarul din
-tabla cu numarul din vectorul "valori", iar cand gasesc pozitia, o retin, si 
-colorez background-ul cu acea culoare de la aceeasi pozitie din vectorul
-de culori(fiind corelate pozitiile din vectorul "valori" si din cel "culori").
-  In functia "validare" se verifica dupa fiecare mutare daca exista castigator
-sau pierzator. In prima faza, verific daca exista cel putin un zero, pentru ca
-daca exista, inseamna ca sigur se mai poate realiza o mutare, deci nu mai trebuie
-sa verific asta. Daca se gaseste un 2048, iese automat cu variabila castigator = 1.
-Daca toate casutele sunt pline, trebuie sa verific daca e o miscare valida
-(algoritm de la mutari). Daca gasesc cel putin o mutare jos, sus, stanga,
-dreapta, ies din fiecare while pentru ca nu mai are rost sa continui,
-se poate efectua cel putin o miscare. Daca nu se poate efectua nicio
-miscare, returnez 1(joc incheiat).
-  Meniul afiseaza pe ecran cele 3 optiuni, iar cu ajutorul sagetilor, se 
-actualizeaza variabila highlight, care, in functie de numar, highlightuieste 
-optiunea. Daca se apasa insa Resume de la inceput, neexistand un joc precedent, 
-aceasta nu va fi executata.
-  In functia "mutare_automata" se creeaza o masca a tablei de fiecare data
-cand nu a fost apasata nicio tasta in cele 8 secunde. Dupa crearea mastii,
-se va face pe aceasta fiecare mutare si se va incrementa un vector de frecventa
-ce are 4 elemente:
-0 - mutare stanga;
-1 - mutare dreapta;
-2 - mutare sus;
-3 - mutare jos;
-  La sfarsit, avand stocat in vector cate castue nenule sunt, se va returna
-minimul, in speta, miscarea in care exista cele mai multe patrate libere.
-In functia "interfata_jocnou" se afiseaza, in prima faza, tabla initializata
-cu cele doua valori random, urmand, apasand tastele, sa fie facute mutarile
-specifice. 
-  Dupa fiecare mutare, verific daca se mai pot face miscari/exista 2048, iar
-in acest afirmativ, salvez scorul, pentru a fi afisat in runda urmatoare.
-Daca se apasa q, presupun ca se va da resume, deci salvez matricea intr-un
-fisier pentru a o restabili in caz de resume.
-  Functia "interfata_resume" este aceeasi cu cea prezentata mai sus, cu observatia
-ca aici se va citi matricea din fisier, cea salvata mai devreme, cand s-a apasat
-tasta Q. Aceasta functie nu poate fi accesata daca nu exista o matrice in fisier.
-BONSURI: 
-- culori diferite in functie de valoare(procedeu explicat mai sus)
-- undo:
-    Am retinut o copie a matricei inaintea fiecarei miscari si scorul aferent,
-iar la apasarea tastei Z se transfera matricea copie in matricea curenta
-si scorul copie in scorul veridic.
-- clasament:
-  In functia "username" se introduce de la tastatura un username,
-pentru a fi pus in fisier alaturi de scorul care va iesi la final, dupa
-infrangere/castig. La inceput, neexistand un scor, nu va aparea nimic in 
-timpul jocului, dar mai apoi, dupa ce se va salva un jucator cu un scor
- in clasament, vor fi afisati pe ecran.
-  Am retinut username ul si scorul intr-un fisier. In functia "clasament"
-am creat un struct pe care l am sortat in mod descrescator si am ales
-sa afisez primii 10, daca exista, iar daca nu exista 10, numarul lor
-efectiv.
+To ensure optimal positioning, the game must be executed in a terminal with a height of 45 and a width of 177. The total development time spanned 12 days, with varying workloads, some days involving minimal effort, while others required up to 7-8 hours of work.
 
-  
+Initially, the function "initialize_board" was used to set all game elements to zero. The "initial_numbers" function is called only once and is responsible for generating two random numbers (either 2 or 4) at random positions. First, a random position is generated, and since the board is empty, the random number is placed there. Subsequently, another position is generated, ensuring it does not coincide with the first number's position. Once verified, the while loop exits, and either a 2 or 4 is placed in the second position.
+
+The "date" function is a simple mechanism, creating a `time_t` variable (t) and calling the `time` function to modify the variable in memory, which returns the number of seconds since January 1, 1970. Using the time structure, details such as day, month, year, etc., can then be displayed. The "random_number" function is invoked whenever a valid move occurs, following the logic described for the "initial_numbers" function. A random position is generated, checked for availability, and then either a 2 or 4 is placed at that position.
+
+The functions "move_left," "move_right," "move_down," and "move_up" operate on the same principle. As an example, the leftward movement will be explained in detail. The function returns an integer to indicate whether a move is valid or invalid. Initially, `valid_move` is set to 0 and will be updated if any element in any row moves left at least once. For a leftward move, the function loops through all rows, starting from the first column. If the element in the first column is zero, no movement can occur, so the loop continues to the right until a non-zero element is found, checking if it can be moved left. If a non-zero element is encountered, it is stored in an auxiliary variable to assess whether the move resulted in a merge or simply shifted the element past zeros. The function checks if the element to the left is either zero or equal to the current element. If either condition is met, the current element is added to the element on the left, the current position is reset to zero, and the process repeats for subsequent columns. After the final possible merge, if the variable `j` is on a non-zero position, it is incremented to avoid an infinite loop. If the final element resulting from the move differs from the original, the score is increased to reflect the merge.
+
+The "initialize_colors" function creates all the necessary colors and color pairs using RGB values. The "display_board" function is called each time the board is modified, either in the game copy (for undo purposes) or on the actual game board. Arrays for values and colors are created, with each element corresponding to a number in the value array and its associated color in the color array. For each matrix element, a `WINDOW` (cell) is created and colored based on the number at that position. To determine the correct color, the position on the board is compared to the value array, and once the matching position is found, the background is colored using the color at the corresponding position in the color array (as the value and color arrays are correlated).
+
+The "validate" function checks after every move whether there is a winner or if the game is over. First, it checks if there is at least one zero on the board, as this means that further moves are possible, and no additional checks are required. If a 2048 tile is present, the game exits with `winner = 1`. If all tiles are filled, the function verifies whether a valid move can still be made (using the movement algorithms). If any valid move (left, right, up, or down) is possible, the loop exits, as no further checks are necessary. If no valid moves remain, the function returns 1 (game over).
+
+The menu displays three options on the screen, and using the arrow keys, the `highlight` variable is updated. Depending on the variable's value, the selected option is highlighted. However, if "Resume" is chosen at the start, and no previous game exists, this option will not be executed.
+
+In the "auto_move" function, a mask of the board is created every time no key is pressed within 8 seconds. Once the mask is generated, each possible move is simulated, and a frequency array with four elements is updated: 0 - move left, 1 - move right, 2 - move up, 3 - move down. At the end, the move that results in the most empty tiles is selected as the optimal move.
+
+In the "new_game_interface," the initial board is displayed with two randomly generated values, and the corresponding moves are made using the arrow keys. After each move, a check is performed to see if further moves can be made or if a 2048 tile has been achieved. If these conditions are met, the score is saved and displayed in the next round. If 'q' is pressed, the game assumes a resume will be chosen later, and the board matrix is saved to a file in case a resume is needed.
+
+The "resume_interface" is similar to the previous function, with the distinction that here the matrix is read from a saved file, which was created earlier when 'Q' was pressed. This function cannot be accessed if no saved matrix exists in the file.
+
+### Bonuses:
+
+- **Color Variation by Value**: Different colors are assigned to tiles based on their value (as explained earlier).
+- **Undo**: A copy of the matrix and score is saved before each move. When 'Z' is pressed, the matrix and score are restored to their previous state.
+- **Leaderboard**: In the "username" function, a username is input via the keyboard and stored in a file along with the final score after a win or loss. At first, when no score is available, nothing is displayed. However, once a player and score are saved, they are displayed on the screen. The usernames and scores are stored in a file. In the "leaderboard" function, a struct is created, sorted in descending order, and the top 10 scores are displayed, or fewer if less than 10 exist.
